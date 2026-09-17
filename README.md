@@ -2,8 +2,10 @@
 ___
 ***#1*** Desarrolle una clase base denominada "Animal" que incluya los atributos "nombre" y "edad", junto con un método "hacer_sonido()" que emita un mensaje genérico. Posteriormente, implemente tres clases derivadas: 
 
-Perro ("¡Guau guau!") 
-Gato ("¡Miau miau!")  
+Perro ("¡Guau guau!")  
+
+Gato ("¡Miau miau!") 
+
 Vaca ("¡Muuuu!"). 
 
 *Requisitos: cada clase hija debe sobrescribir el método "hacer_sonido()" y se debe iterar sobre una lista conteniendo un objeto de cada tipo para ejecutar dicho método.*
