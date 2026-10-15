@@ -71,3 +71,20 @@ Requisitos:
 • Usa super().__init__() en las hijas.
 • Crea un objeto de cada clase y llama a soldar().
 
+# ***8. Análisis de Estabilidad Estructural en Ingeniería Civil (Enunciados)***
+
+* Ingenieros civiles calculan la matriz de rigidez y deformación de elementos sometidos a cargas estáticas.
+
+
+* *Reto del Proyecto:*
+
+* Construir una matriz cuadrada ($N \times M$) con los coeficientes de rigidez estructural.
+
+
+* Extraer los elementos de la diagonal principal y almacenarlos en un *vector de análisis*.
+
+
+* Ordenar los puntos críticos de deformación de mayor a menor valor.
+
+
+* Desarrollar rutinas de persistencia para guardar la matriz de resultados procesados en un archivo externo listo para reportes formales.
