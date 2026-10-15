@@ -1,0 +1,15 @@
+REPORTE DE ANALISIS DE ESTABILIDAD ESTRUCTURAL
+================================================
+
+Dimensiones de la matriz: 3 x 3
+
+Matriz de coeficientes de rigidez:
+      100.00      105.00      110.00
+       95.00      120.00      130.00
+      150.00      140.00      200.00
+
+Vector de analisis (diagonal principal):
+  [100.0, 120.0, 200.0]
+
+Puntos criticos de deformacion (mayor a menor):
+  [200.0, 120.0, 100.0]
