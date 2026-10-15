@@ -2,11 +2,9 @@
 """
 Punto de entrada del programa.
 Ejercicio 8: Analisis de Estabilidad Estructural en Ingenieria Civil
+Victoria Correa 30430255
+Helena pena 30204443
 
-Aqui se conectan las tres clases del proyecto:
-    MatrizRigidez       -> construye la matriz de coeficientes de rigidez
-    AnalisisCritico      -> extrae la diagonal y ordena los puntos criticos
-    ReporteEstructural   -> muestra y guarda el reporte final
 """
 
 from matriz_rigidez import MatrizRigidez
