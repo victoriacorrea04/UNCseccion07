@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+{% if emocion %}
+  <h2>Detectamos: {{ emocion.emoji }} {{ emocion.label }}</h2>
+  <p>Estas películas pueden ir bien con tu estado de ánimo:</p>
+{% else %}
+  <h2>No pudimos detectar tu emoción 🤔</h2>
+  <p>Prueba con palabras como "feliz", "triste", "enojado"… Mientras tanto, las mejor puntuadas:</p>
+{% endif %}
+<div class="grid">
+  {% for p in peliculas %}{% include "_card.html" %}{% endfor %}
+</div>
+<p><a href="{{ url_for('index') }}">← Volver</a></p>
+{% endblock %}

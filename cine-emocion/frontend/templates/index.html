@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="box">
+  <h2>¿Cómo te sientes hoy?</h2>
+  <form method="post" action="{{ url_for('recomendar') }}" class="row">
+    <input name="texto" placeholder="Ej: hoy me siento muy triste y cansado…" required>
+    <button>Recomendar</button>
+  </form>
+  <div class="chips">
+    {% for e in emociones %}
+      <a href="{{ url_for('recomendar', emocion=e.name) }}">{{ e.emoji }} {{ e.label }}</a>
+    {% endfor %}
+  </div>
+</section>
+
+<h2>Catálogo <small class="total">({{ total }} películas)</small></h2>
+<form method="get" class="row">
+  <select name="genero" onchange="this.form.submit()">
+    <option value="">Todos los géneros</option>
+    {% for g in generos %}
+      <option value="{{ g.id }}" {{ 'selected' if g.id == genero_id }}>{{ g.name }}</option>
+    {% endfor %}
+  </select>
+</form>
+<div class="grid">
+  {% for p in peliculas %}{% include "_card.html" %}{% endfor %}
+</div>
+
+<nav class="paginado">
+  {% if pagina > 1 %}
+    <a href="{{ url_for('index', pagina=pagina - 1, genero=genero_id) }}">← Anterior</a>
+  {% else %}<span class="off">← Anterior</span>{% endif %}
+  <span>Página {{ pagina }} de {{ paginas }}</span>
+  {% if pagina < paginas %}
+    <a href="{{ url_for('index', pagina=pagina + 1, genero=genero_id) }}">Siguiente →</a>
+  {% else %}<span class="off">Siguiente →</span>{% endif %}
+</nav>
+{% endblock %}

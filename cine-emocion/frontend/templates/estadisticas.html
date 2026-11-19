@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>¿Cómo te has sentido?</h2>
+<form method="get" class="row">
+  <select name="dias" onchange="this.form.submit()">
+    {% for n in [7, 14, 30, 90] %}
+      <option value="{{ n }}" {{ 'selected' if n == dias_atras }}>Últimos {{ n }} días</option>
+    {% endfor %}
+  </select>
+</form>
+
+{% if series %}
+<div class="grafico"><canvas id="grafico"></canvas></div>
+
+<h3>Día con más registros de cada emoción</h3>
+<table>
+  <tr><th>Emoción</th><th>Día</th><th>Veces ese día</th><th>Total</th></tr>
+  {% for r in resumen %}
+    <tr><td>{{ r.emoji }} {{ r.emocion }}</td><td>{{ r.dia }}</td><td>{{ r.veces }}</td><td>{{ r.total }}</td></tr>
+  {% endfor %}
+</table>
+
+<script src="{{ url_for('static', filename='js/chart.umd.min.js') }}"></script>
+<script>
+  const colores = {"Feliz": "#ffd166", "Triste": "#4cc9f0", "Enojado": "#ef476f",
+                   "Estresado / Ansioso": "#b388ff", "Aburrido": "#8d99ae", "Romántico": "#ff8fab"};
+  const series = {{ series | tojson }};
+  new Chart(document.getElementById("grafico"), {
+    type: "bar",
+    data: {
+      labels: {{ etiquetas | tojson }},
+      datasets: series.map(s => ({label: s.label, data: s.data, backgroundColor: colores[s.emocion] || "#5b7cfa", borderRadius: 4}))
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {legend: {labels: {color: "#e8eaf3"}}},
+      scales: {
+        x: {ticks: {color: "#c3c8e0"}, grid: {color: "#232948"}},
+        y: {beginAtZero: true, ticks: {color: "#c3c8e0", precision: 0}, grid: {color: "#232948"},
+            title: {display: true, text: "Veces registrada", color: "#c3c8e0"}}
+      }
+    }
+  });
+</script>
+{% else %}
+  <p>Aún no hay búsquedas en este periodo. Usa el recomendador y vuelve aquí 🙂</p>
+{% endif %}
+{% endblock %}
