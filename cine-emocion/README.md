@@ -25,6 +25,60 @@ cine-emocion/
     └── static/               CSS y Chart.js
 ```
 
+## Vistas del frontend
+
+Capturas de cada pantalla de CineEmoción (frontend en http://127.0.0.1:5000).
+
+### 1. Catálogo (`/`)
+![Catálogo](docs/screenshots/01_catalogo.png)
+
+Página principal. Tiene dos partes:
+- **¿Cómo te sientes hoy?**: un campo de texto libre (ej. "hoy me siento muy triste y cansado") con el botón *Recomendar*, y atajos de un clic para las 6 emociones: Feliz, Triste, Enojado, Estresado/Ansioso, Aburrido y Romántico.
+- **Catálogo** con las 100 películas ordenadas de mejor a peor puntuación, en tarjetas con póster, nota, géneros y sinopsis. Está **paginado** de 12 en 12.
+
+### 2. Catálogo filtrado por género (`/?genero=35`)
+![Catálogo filtrado](docs/screenshots/02_catalogo_filtrado.png)
+
+El selector **Todos los géneros** filtra el catálogo por género (aquí, Comedia: 27 películas). El contador y la paginación se ajustan al filtro.
+
+### 3. Recomendación según la emoción (`/recomendar`)
+![Recomendación](docs/screenshots/03_recomendacion_triste.png)
+
+Muestra la emoción detectada ("Detectamos: 😳 Triste") y las películas sugeridas para ese estado de ánimo. La emoción sale del texto escrito (detección por palabras clave) o del botón pulsado. Las películas se ordenan por cuántos géneros de la emoción comparten y, si empatan, por puntuación. Cada consulta queda guardada en el historial que alimenta las estadísticas.
+
+### 4. Detalle de película (`/pelicula/<id>`)
+![Detalle](docs/screenshots/04_detalle_pelicula.png)
+
+Al pulsar una tarjeta se ve el póster grande, título y año, puntuación sobre 10, géneros y sinopsis completa, con un enlace para volver al catálogo.
+
+### 5. Estadísticas (`/estadisticas`)
+![Estadísticas](docs/screenshots/05_estadisticas.png)
+
+Gráfico de barras (Chart.js) con las veces que se registró cada emoción por día, y una tabla con el **día con más registros de cada emoción** y su total. El selector de periodo (por defecto, últimos 30 días) cambia el rango. Las barras salen del historial de búsquedas (los datos de ejemplo están en `backend/sql/seed_demo_busquedas.sql`).
+
+### 6. Iniciar sesión (`/login`)
+![Login](docs/screenshots/06_login.png)
+
+Formulario de **usuario y contraseña**. Hay un usuario precargado: `demo` / `demo1234`.
+
+![Login con error](docs/screenshots/08_login_error.png)
+
+Si los datos no son correctos se muestra "Usuario o contraseña incorrectos".
+
+### 7. Crear cuenta (`/registro`)
+![Registro](docs/screenshots/07_registro.png)
+
+Permite crear un usuario nuevo (3 a 50 caracteres de usuario, mínimo 4 de contraseña, guardada con hash).
+
+![Registro con usuario repetido](docs/screenshots/09_registro_repetido.png)
+
+Valida que el usuario no exista: si ya está tomado, avisa "Ese usuario ya existe".
+
+### 8. Bienvenida
+![Bienvenida](docs/screenshots/10_bienvenida.png)
+
+Tras iniciar sesión o registrarse con éxito se muestra "¡Hola, usuario!" con un enlace al catálogo. El login solo valida las credenciales; no mantiene una sesión abierta.
+
 ## Modelo de datos y JOINs
 ```
 movies ──< movie_genres >── genres ──< emotion_genres >── emotions ──< searches
@@ -36,7 +90,7 @@ movies ──< movie_genres >── genres ──< emotion_genres >── emotio
 
 ## Cómo ejecutarlo
 1. Base de datos: `docker compose up -d`
-   (o con MySQL local: cargar en orden `backend/sql/schema.sql`, `seed.sql`, `seed_extra.sql`, `seed_extra2.sql`, `seed_extra3.sql`, `seed_users.sql`)
+   (o con MySQL local: cargar en orden `backend/sql/schema.sql`, `seed.sql`, `seed_extra.sql`, `seed_extra2.sql`, `seed_extra3.sql`, `seed_users.sql`, `seed_posters.sql`)
 2. Entorno Python (una sola vez):
    ```bash
    python3 -m venv venv && source venv/bin/activate

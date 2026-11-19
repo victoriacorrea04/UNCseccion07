@@ -1,0 +1,17 @@
+# Levanta MySQL listo para usar: docker compose up -d
+services:
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: cine_emocion
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./backend/sql/schema.sql:/docker-entrypoint-initdb.d/1_schema.sql
+      - ./backend/sql/seed.sql:/docker-entrypoint-initdb.d/2_seed.sql
+      - ./backend/sql/seed_extra.sql:/docker-entrypoint-initdb.d/3_seed_extra.sql
+      - ./backend/sql/seed_extra2.sql:/docker-entrypoint-initdb.d/4_seed_extra2.sql
+      - ./backend/sql/seed_extra3.sql:/docker-entrypoint-initdb.d/5_seed_extra3.sql
+      - ./backend/sql/seed_users.sql:/docker-entrypoint-initdb.d/6_seed_users.sql
+      - ./backend/sql/seed_posters.sql:/docker-entrypoint-initdb.d/7_seed_posters.sql
