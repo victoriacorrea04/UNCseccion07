@@ -1,0 +1,3 @@
+# Instala backend + frontend en un solo entorno virtual
+-r backend/requirements.txt
+-r frontend/requirements.txt
