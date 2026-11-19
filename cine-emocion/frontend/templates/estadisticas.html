@@ -1,48 +1,76 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>¿Cómo te has sentido?</h2>
-<form method="get" class="row">
-  <select name="dias" onchange="this.form.submit()">
-    {% for n in [7, 14, 30, 90] %}
-      <option value="{{ n }}" {{ 'selected' if n == dias_atras }}>Últimos {{ n }} días</option>
-    {% endfor %}
-  </select>
-</form>
+<div class="titulo-seccion">
+  <div>
+    <p class="eyebrow">{{ 'Tu historial' if propias else 'Todos los usuarios' }}</p>
+    <h1>¿Cómo te has sentido?</h1>
+  </div>
+  {% if request.args.get('u') %}
+  <div class="tabs">
+    <a class="{{ 'on' if propias }}" href="{{ url_for('estadisticas', dias=dias_atras) }}">Mis estadísticas</a>
+    <a class="{{ 'on' if not propias }}" href="{{ url_for('estadisticas', dias=dias_atras, todos=1) }}">Todos</a>
+  </div>
+  {% endif %}
+</div>
+
+{% if preferencias %}
+<section class="tarjeta prefs">
+  <h3>Tus preferencias</h3>
+  <p><span class="etiqueta">Te gustan</span>
+    {% for g in preferencias.gusta %}<span class="pill ok">{{ g }}</span>{% else %}<span class="vacio">Aún no elegiste</span>{% endfor %}</p>
+  <p><span class="etiqueta">Prefieres evitar</span>
+    {% for g in preferencias.evita %}<span class="pill no">{{ g }}</span>{% else %}<span class="vacio">Ninguno</span>{% endfor %}</p>
+  <a class="enlace-flecha" href="{{ url_for('hoy') }}">Cambiar mis respuestas →</a>
+</section>
+{% endif %}
+
+<div class="filtros">
+  {% for n in [7, 14, 30, 90] %}
+    <a class="pill-filtro {{ 'on' if n == dias_atras }}" href="{{ url_for('estadisticas', dias=n, todos=(1 if not propias and request.args.get('u') else None)) }}">Últimos {{ n }} días</a>
+  {% endfor %}
+</div>
 
 {% if series %}
-<div class="grafico"><canvas id="grafico"></canvas></div>
+<div class="tarjeta grafico"><canvas id="grafico"></canvas></div>
 
-<h3>Día con más registros de cada emoción</h3>
-<table>
-  <tr><th>Emoción</th><th>Día</th><th>Veces ese día</th><th>Total</th></tr>
-  {% for r in resumen %}
-    <tr><td>{{ r.emoji }} {{ r.emocion }}</td><td>{{ r.dia }}</td><td>{{ r.veces }}</td><td>{{ r.total }}</td></tr>
-  {% endfor %}
-</table>
+<div class="tarjeta">
+  <h3>Día con más registros de cada emoción</h3>
+  <table>
+    <tr><th>Emoción</th><th>Día</th><th>Veces ese día</th><th>Total</th></tr>
+    {% for r in resumen %}
+      <tr><td>{{ r.emoji }} {{ r.emocion }}</td><td>{{ r.dia }}</td><td>{{ r.veces }}</td><td>{{ r.total }}</td></tr>
+    {% endfor %}
+  </table>
+</div>
 
 <script src="{{ url_for('static', filename='js/chart.umd.min.js') }}"></script>
 <script>
   const colores = {"Feliz": "#ffd166", "Triste": "#4cc9f0", "Enojado": "#ef476f",
                    "Estresado / Ansioso": "#b388ff", "Aburrido": "#8d99ae", "Romántico": "#ff8fab"};
   const series = {{ series | tojson }};
+  Chart.defaults.font.family = "'DM Sans', system-ui, sans-serif";
   new Chart(document.getElementById("grafico"), {
     type: "bar",
     data: {
       labels: {{ etiquetas | tojson }},
-      datasets: series.map(s => ({label: s.label, data: s.data, backgroundColor: colores[s.emocion] || "#5b7cfa", borderRadius: 4}))
+      datasets: series.map(s => ({label: s.label, data: s.data, backgroundColor: colores[s.emocion] || "#f4b942", borderRadius: 6, maxBarThickness: 28}))
     },
     options: {
       responsive: true, maintainAspectRatio: false,
-      plugins: {legend: {labels: {color: "#e8eaf3"}}},
+      plugins: {legend: {labels: {color: "#d9d3e6", usePointStyle: true, boxWidth: 8}}},
       scales: {
-        x: {ticks: {color: "#c3c8e0"}, grid: {color: "#232948"}},
-        y: {beginAtZero: true, ticks: {color: "#c3c8e0", precision: 0}, grid: {color: "#232948"},
-            title: {display: true, text: "Veces registrada", color: "#c3c8e0"}}
+        x: {ticks: {color: "#a59fb8"}, grid: {display: false}},
+        y: {beginAtZero: true, ticks: {color: "#a59fb8", precision: 0}, grid: {color: "rgba(255,255,255,.06)"},
+            title: {display: true, text: "Veces registrada", color: "#a59fb8"}}
       }
     }
   });
 </script>
 {% else %}
-  <p>Aún no hay búsquedas en este periodo. Usa el recomendador y vuelve aquí 🙂</p>
+  <div class="tarjeta vacio-grande">
+    <span class="emoji-grande">📊</span>
+    <p>{{ 'Aún no tienes búsquedas en este periodo.' if propias else 'Aún no hay búsquedas en este periodo.' }}</p>
+    <a class="boton" href="{{ url_for('hoy') if request.args.get('u') else url_for('index') }}">Contar cómo me siento</a>
+  </div>
 {% endif %}
 {% endblock %}

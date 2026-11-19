@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="portada compacta">
+  <p class="eyebrow">Hola, {{ usuario }} 👋</p>
+  <h1>¿Cómo te sientes <em>hoy</em>?</h1>
+  <p class="sub">Responde estas tres preguntas y el sistema sabrá qué películas mostrarte.</p>
+</section>
+
+{% if error %}<p class="error caja-error">{{ error }}</p>{% endif %}
+
+<form method="post" action="{{ url_for('hoy') }}" class="cuestionario">
+  <section class="tarjeta paso">
+    <h3><b>1</b> ¿Cómo te sientes ahora mismo?</h3>
+    <div class="opciones tiles">
+      {% for e in emociones %}
+        <label class="emo emo-{{ e.name }}"><input type="radio" name="emocion" value="{{ e.name }}" required {{ 'checked' if e.name == elegida }}>
+          <span class="tile"><i>{{ e.emoji }}</i>{{ e.label }}</span></label>
+      {% endfor %}
+    </div>
+  </section>
+
+  <section class="tarjeta paso">
+    <h3><b>2</b> ¿Qué géneros te gustan?</h3>
+    <p class="ayuda">Los pondremos primero en tus recomendaciones.</p>
+    <div class="opciones">
+      {% for g in generos %}
+        <label class="opcion gusta"><input type="checkbox" name="gusta" value="{{ g.id }}" {{ 'checked' if g.id in preferencias.gusta }}><span>{{ g.name }}</span></label>
+      {% endfor %}
+    </div>
+  </section>
+
+  <section class="tarjeta paso">
+    <h3><b>3</b> ¿Cuáles prefieres evitar hoy?</h3>
+    <p class="ayuda">No te mostraremos películas con estos géneros.</p>
+    <div class="opciones">
+      {% for g in generos %}
+        <label class="opcion evita"><input type="checkbox" name="evita" value="{{ g.id }}" {{ 'checked' if g.id in preferencias.evita }}><span>{{ g.name }}</span></label>
+      {% endfor %}
+    </div>
+  </section>
+
+  <div class="acciones">
+    <button class="boton">Ver mis recomendaciones</button>
+    <a class="boton-sec" href="{{ url_for('index') }}">Saltar e ir al catálogo</a>
+  </div>
+</form>
+
+<script>
+  // Un genero no puede estar en "me gusta" y en "evitar" a la vez
+  document.querySelectorAll('input[name=gusta], input[name=evita]').forEach(function (i) {
+    i.addEventListener('change', function () {
+      if (!i.checked) return;
+      var otro = i.name === 'gusta' ? 'evita' : 'gusta';
+      var par = document.querySelector('input[name=' + otro + '][value="' + i.value + '"]');
+      if (par) par.checked = false;
+    });
+  });
+</script>
+{% endblock %}

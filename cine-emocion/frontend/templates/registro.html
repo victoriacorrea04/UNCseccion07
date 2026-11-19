@@ -1,11 +1,5 @@
-{% extends "base.html" %}
-{% block content %}
-<h2>Crear cuenta</h2>
-{% if error %}<p class="error">{{ error }}</p>{% endif %}
-<form method="post" class="auth">
-  <input name="usuario" placeholder="Usuario" required minlength="3" maxlength="50" autofocus>
-  <input name="password" type="password" placeholder="Contraseña" required minlength="4">
-  <button>Registrarme</button>
-</form>
-<p>¿Ya tienes cuenta? <a href="{{ url_for('login') }}">Iniciar sesión</a></p>
-{% endblock %}
+{% extends "auth_base.html" %}
+{% block eyebrow %}Es gratis y rápido{% endblock %}
+{% block titulo %}Crear cuenta{% endblock %}
+{% block boton %}Registrarme{% endblock %}
+{% block alterno %}¿Ya tienes cuenta? <a href="{{ url_for('login') }}">Iniciar sesión</a>{% endblock %}

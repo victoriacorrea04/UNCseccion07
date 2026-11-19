@@ -16,3 +16,18 @@ INSERT INTO searches (text, emotion_id, created_at) VALUES
 ('[demo] enojado', 3, NOW() - INTERVAL 1 DAY),
 ('[demo] romantico', 6, NOW() - INTERVAL 1 DAY),
 ('[demo] feliz', 1, NOW() - INTERVAL 1 DAY);
+
+-- Historial del usuario demo (para ver "Mis estadisticas"). Se borra con el mismo DELETE de arriba.
+INSERT INTO searches (text, emotion_id, user_id, created_at)
+SELECT t.texto, t.emocion, u.id, NOW() - INTERVAL t.dias DAY
+FROM users u
+JOIN (SELECT '[demo] triste' AS texto, 2 AS emocion, 6 AS dias
+      UNION ALL SELECT '[demo] triste otra vez', 2, 5
+      UNION ALL SELECT '[demo] feliz', 1, 4
+      UNION ALL SELECT '[demo] romantico', 6, 3
+      UNION ALL SELECT '[demo] romantico', 6, 3
+      UNION ALL SELECT '[demo] estresado', 4, 2
+      UNION ALL SELECT '[demo] feliz', 1, 1
+      UNION ALL SELECT '[demo] feliz', 1, 1
+      UNION ALL SELECT '[demo] aburrido', 5, 0) t
+WHERE u.username = 'demo';

@@ -27,66 +27,74 @@ cine-emocion/
 
 ## Vistas del frontend
 
-Capturas de cada pantalla de CineEmoción (frontend en http://127.0.0.1:5000).
+Capturas de cada pantalla de CineEmoción (frontend en http://127.0.0.1:5000). El diseño usa una paleta cálida de cine (fondo oscuro con acentos dorado y rosa), tipografía Fraunces para los títulos y un color propio para cada emoción.
 
-### 1. Catálogo (`/`)
-![Catálogo](docs/screenshots/01_catalogo.png)
+### 1. Iniciar sesión (`/`)
+![Login](docs/screenshots/01_login.png)
 
-Página principal. Tiene dos partes:
-- **¿Cómo te sientes hoy?**: un campo de texto libre (ej. "hoy me siento muy triste y cansado") con el botón *Recomendar*, y atajos de un clic para las 6 emociones: Feliz, Triste, Enojado, Estresado/Ansioso, Aburrido y Romántico.
-- **Catálogo** con las 100 películas ordenadas de mejor a peor puntuación, en tarjetas con póster, nota, géneros y sinopsis. Está **paginado** de 12 en 12.
+Pantalla de entrada dividida en dos mitades:
+- **Izquierda**: imagen del sistema, un mosaico con los pósters de las películas mejor puntuadas y el lema "Películas para cómo te sientes".
+- **Derecha**: formulario de **usuario y contraseña**. Hay un usuario precargado: `demo` / `demo1234`.
 
-### 2. Catálogo filtrado por género (`/?genero=35`)
-![Catálogo filtrado](docs/screenshots/02_catalogo_filtrado.png)
+Al entrar con éxito se pasa al cuestionario. Si los datos no son correctos se muestra "Usuario o contraseña incorrectos":
 
-El selector **Todos los géneros** filtra el catálogo por género (aquí, Comedia: 27 películas). El contador y la paginación se ajustan al filtro.
+![Login con error](docs/screenshots/02_login_error.png)
 
-### 3. Recomendación según la emoción (`/recomendar`)
-![Recomendación](docs/screenshots/03_recomendacion_triste.png)
+### 2. Crear cuenta (`/registro`)
+![Registro](docs/screenshots/03_registro.png)
 
-Muestra la emoción detectada ("Detectamos: 😳 Triste") y las películas sugeridas para ese estado de ánimo. La emoción sale del texto escrito (detección por palabras clave) o del botón pulsado. Las películas se ordenan por cuántos géneros de la emoción comparten y, si empatan, por puntuación. Cada consulta queda guardada en el historial que alimenta las estadísticas.
+Misma pantalla dividida para crear un usuario nuevo (3 a 50 caracteres de usuario, mínimo 4 de contraseña, guardada con hash). Tras registrarse entra directo al cuestionario. Valida que el usuario no exista:
 
-### 4. Detalle de película (`/pelicula/<id>`)
-![Detalle](docs/screenshots/04_detalle_pelicula.png)
+![Registro con usuario repetido](docs/screenshots/04_registro_repetido.png)
 
-Al pulsar una tarjeta se ve el póster grande, título y año, puntuación sobre 10, géneros y sinopsis completa, con un enlace para volver al catálogo.
+### 3. Cuestionario "¿Cómo te sientes hoy?" (`/hoy?u=<usuario>`)
+![Cuestionario](docs/screenshots/05_cuestionario.png)
 
-### 5. Estadísticas (`/estadisticas`)
-![Estadísticas](docs/screenshots/05_estadisticas.png)
+Es lo primero que ve el usuario al entrar. Son tres preguntas de opción:
+1. **¿Cómo te sientes ahora mismo?**: una de las 6 emociones (Feliz, Triste, Enojado, Estresado/Ansioso, Aburrido, Romántico).
+2. **¿Qué géneros te gustan?**: se priorizan en sus recomendaciones.
+3. **¿Cuáles prefieres evitar hoy?**: las películas con esos géneros no se le muestran.
 
-Gráfico de barras (Chart.js) con las veces que se registró cada emoción por día, y una tabla con el **día con más registros de cada emoción** y su total. El selector de periodo (por defecto, últimos 30 días) cambia el rango. Las barras salen del historial de búsquedas (los datos de ejemplo están en `backend/sql/seed_demo_busquedas.sql`).
+Las respuestas se **guardan como preferencias del usuario** (aparecen marcadas la próxima vez) y un género no puede estar en "me gusta" y en "evitar" a la vez. Al enviar, se registra la emoción en su historial y se muestran sus recomendaciones. Con "Saltar" se va directo al catálogo.
 
-### 6. Iniciar sesión (`/login`)
-![Login](docs/screenshots/06_login.png)
+### 4. Recomendaciones personalizadas (`/recomendar`)
+![Recomendación](docs/screenshots/08_recomendacion.png)
 
-Formulario de **usuario y contraseña**. Hay un usuario precargado: `demo` / `demo1234`.
+Muestra la emoción elegida con su color y las películas sugeridas. Las películas se ordenan por cuántos géneros de la emoción comparten; si el usuario tiene preferencias, **cada género que le gusta suma puntos y las películas con géneros que evita se descartan** (se indica con el aviso "Ajustado a tus preferencias"). Cada consulta queda guardada en el historial **del usuario**.
 
-![Login con error](docs/screenshots/08_login_error.png)
+### 5. Catálogo (`/catalogo`)
+![Catálogo](docs/screenshots/06_catalogo.png)
 
-Si los datos no son correctos se muestra "Usuario o contraseña incorrectos".
+Catálogo de las 100 películas ordenadas de mejor a peor puntuación, paginado de 12 en 12, con tarjetas de póster, nota, año, géneros y sinopsis. Arriba tiene el campo de texto libre ("hoy me siento muy triste y cansado"), atajos de un clic para cada emoción y un acceso al cuestionario completo. Los géneros funcionan como filtros:
 
-### 7. Crear cuenta (`/registro`)
-![Registro](docs/screenshots/07_registro.png)
+![Catálogo filtrado](docs/screenshots/07_catalogo_filtrado.png)
 
-Permite crear un usuario nuevo (3 a 50 caracteres de usuario, mínimo 4 de contraseña, guardada con hash).
+### 6. Detalle de película (`/pelicula/<id>`)
+![Detalle](docs/screenshots/09_detalle_pelicula.png)
 
-![Registro con usuario repetido](docs/screenshots/09_registro_repetido.png)
+Póster grande sobre un fondo difuminado con sus colores, título, año, nota sobre 10, géneros y sinopsis completa.
 
-Valida que el usuario no exista: si ya está tomado, avisa "Ese usuario ya existe".
+### 7. Estadísticas del usuario (`/estadisticas?u=<usuario>`)
+![Estadísticas propias](docs/screenshots/10_estadisticas_propias.png)
 
-### 8. Bienvenida
-![Bienvenida](docs/screenshots/10_bienvenida.png)
+Relaciona el **historial y las preferencias de cada usuario**: muestra sus géneros favoritos y los que evita (con un enlace para cambiarlos), un gráfico de barras con las veces que registró cada emoción por día y una tabla con el día con más registros de cada una. Se puede cambiar el periodo (7, 14, 30 o 90 días).
 
-Tras iniciar sesión o registrarse con éxito se muestra "¡Hola, usuario!" con un enlace al catálogo. El login solo valida las credenciales; no mantiene una sesión abierta.
+La pestaña **Todos** muestra las estadísticas de todos los usuarios:
+
+![Estadísticas de todos](docs/screenshots/11_estadisticas_todos.png)
+
+> **Identificación del usuario:** no hay cookies ni sesión; el nombre viaja en la URL (`?u=demo`) y todos los enlaces lo conservan. Es simple pero **no es seguro**: cualquiera puede cambiar el `u` de la URL y ver o editar los datos de otro usuario. Sirve para un proyecto universitario o una demo. El botón **Salir** vuelve al login.
 
 ## Modelo de datos y JOINs
 ```
-movies ──< movie_genres >── genres ──< emotion_genres >── emotions ──< searches
+movies ──< movie_genres >── genres ──< emotion_genres >── emotions ──< searches >── users
+                                  genres ──< user_genres >── users
 ```
 - **Catálogo**: `movies JOIN movie_genres JOIN genres` (géneros de cada película).
 - **Recomendación**: `emotions JOIN emotion_genres JOIN movie_genres JOIN movies`,
   ordenado por cantidad de géneros coincidentes y puntuación.
-- **Estadísticas**: `searches JOIN emotions` + `GROUP BY` día y emoción (gráfico de barras).
+- **Estadísticas**: `searches JOIN emotions` + `GROUP BY` día y emoción (gráfico de barras), filtrable por usuario (`searches.user_id`).
+- **Preferencias**: `user_genres` guarda, por usuario, los géneros que le gustan o evita; la recomendación las usa para ordenar y para excluir películas.
 
 ## Cómo ejecutarlo
 1. Base de datos: `docker compose up -d`
@@ -99,7 +107,7 @@ movies ──< movie_genres >── genres ──< emotion_genres >── emotio
    cp frontend/.env.example frontend/.env
    ```
 3. Backend (terminal 1):  `cd backend && python app.py`   → http://127.0.0.1:5001
-4. Frontend (terminal 2): `cd frontend && python app.py`  → **http://127.0.0.1:5000**
+4. Frontend (terminal 2): `cd frontend && python app.py`  → **http://127.0.0.1:5000** (pantalla de login; el catálogo queda en `/catalogo`)
 
 ## Endpoints del backend
 | Método | Ruta | Descripción |
@@ -107,10 +115,12 @@ movies ──< movie_genres >── genres ──< emotion_genres >── emotio
 | GET | `/api/peliculas?skip=0&limit=12&genero=35` | catálogo paginado (`total`, `tiene_mas`, `items`) |
 | GET | `/api/peliculas/<id>` | detalle de una película |
 | GET | `/api/generos`, `/api/emociones` | listas auxiliares |
-| POST | `/api/recomendar` | `{"texto": "estoy triste"}` o `{"emocion": "triste"}`; guarda en el historial |
+| POST | `/api/recomendar` | `{"texto": "estoy triste"}` o `{"emocion": "triste"}`, más `"usuario"` opcional (personaliza y guarda en su historial) |
 | GET | `/api/recomendar/<emocion>` | recomendación sin guardar historial |
 | POST | `/api/emocion` | `{"texto": "..."}` → emoción detectada |
-| GET | `/api/estadisticas?dias=30` | datos para el gráfico por día |
+| GET | `/api/estadisticas?dias=30&usuario=demo` | datos para el gráfico por día (`usuario` es opcional: solo sus búsquedas) |
+| GET / PUT | `/api/usuarios/<usuario>/preferencias` | `{"gusta": [ids], "evita": [ids]}`; el PUT reemplaza las preferencias |
+| POST | `/api/registro`, `/api/login` | `{"usuario": "...", "password": "..."}` (409 si el usuario ya existe, 401 si las credenciales fallan) |
 
 Rate limit: 60–120 peticiones por minuto por IP (responde `429` con `Retry-After`).
 
@@ -121,5 +131,6 @@ Las imágenes ya están descargadas en `backend/static/posters/` y la tabla `mov
 `backend/sql/seed_demo_busquedas.sql` inserta búsquedas ficticias (`[demo]`).
 Para borrarlas: `DELETE FROM searches WHERE text LIKE '[demo]%';`
 
-## Login
-Usuario precargado: **demo** / **demo1234**. Desde `/registro` se pueden crear más (no permite usuarios repetidos).
+## Login y usuarios
+Usuario precargado: **demo** / **demo1234** (con preferencias e historial de ejemplo). Desde `/registro` se pueden crear más; no permite usuarios repetidos.
+`backend/sql/seed_demo_busquedas.sql` (opcional) agrega búsquedas de ejemplo, incluidas las del usuario `demo`.

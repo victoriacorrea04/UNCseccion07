@@ -1,13 +1,18 @@
 {% extends "base.html" %}
 {% block content %}
-<article class="detail">
-  {% if p.poster_url %}<img src="{{ p.poster_url | poster }}" alt="{{ p.title }}">{% else %}<div class="noposter big" style="--h:{{ (p.id * 47) % 360 }}"><span>{{ p.title }}</span><small>{{ p.release_year }}</small></div>{% endif %}
-  <div>
-    <h2>{{ p.title }} <small>({{ p.release_year }})</small></h2>
-    <p class="score">⭐ {{ p.rating }} / 10</p>
-    <p><strong>Géneros:</strong> {{ p.generos }}</p>
-    <p>{{ p.overview }}</p>
-    <a href="{{ url_for('index') }}">← Volver al catálogo</a>
+<article class="detalle">
+  {% if p.poster_url %}<div class="fondo" style="background-image:url('{{ p.poster_url | poster }}')"></div>{% endif %}
+  <div class="detalle-poster">
+    {% if p.poster_url %}<img src="{{ p.poster_url | poster }}" alt="{{ p.title }}">
+    {% else %}<div class="noposter big" style="--h:{{ (p.id * 47) % 360 }}"><span>{{ p.title }}</span><small>{{ p.release_year }}</small></div>{% endif %}
+  </div>
+  <div class="detalle-info">
+    <p class="eyebrow">{{ p.release_year }}</p>
+    <h1>{{ p.title }}</h1>
+    <p class="nota"><b>★ {{ p.rating }}</b><span> / 10</span></p>
+    <div class="pills">{% for g in (p.generos or '').split(', ') if g %}<span class="pill">{{ g }}</span>{% endfor %}</div>
+    <p class="sinopsis">{{ p.overview }}</p>
+    <a class="boton-sec" href="{{ url_for('index') }}">← Volver al catálogo</a>
   </div>
 </article>
 {% endblock %}

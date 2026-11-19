@@ -4,17 +4,32 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>CineEmoción</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-  <header>
-    <a class="logo" href="{{ url_for('index') }}">🎬 CineEmoción</a>
+  {% block body %}
+  {% set ep = request.endpoint %}
+  <header class="top">
+    <a class="logo" href="{{ url_for('index') }}">
+      <span class="logo-mark"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6.5v11l9-5.5z" fill="currentColor"/></svg></span>
+      CineEmoción
+    </a>
     <nav>
-      <a href="{{ url_for('index') }}">Catálogo</a>
-      <a href="{{ url_for('estadisticas') }}">Estadísticas</a>
-      <a href="{{ url_for('login') }}">Entrar</a>
+      {% if request.args.get('u') %}<a href="{{ url_for('hoy') }}" class="{{ 'on' if ep == 'hoy' }}">Cómo me siento</a>{% endif %}
+      <a href="{{ url_for('index') }}" class="{{ 'on' if ep in ('index', 'pelicula', 'recomendar') }}">Catálogo</a>
+      <a href="{{ url_for('estadisticas') }}" class="{{ 'on' if ep == 'estadisticas' }}">Estadísticas</a>
     </nav>
+    <div class="cuenta">
+      {% if request.args.get('u') %}
+        <span class="chip-usuario"><i>{{ request.args.get('u')[:1] | upper }}</i>{{ request.args.get('u') }}</span>
+        <a class="salir" href="{{ url_for('login', u=None) }}">Salir</a>
+      {% else %}<a class="salir" href="{{ url_for('login') }}">Entrar</a>{% endif %}
+    </div>
   </header>
   <main>{% block content %}{% endblock %}</main>
+  {% endblock %}
 </body>
 </html>

@@ -1,10 +1,12 @@
 <a class="card" href="{{ url_for('pelicula', movie_id=p.id) }}">
-  {% if p.poster_url %}<img src="{{ p.poster_url | poster }}" alt="{{ p.title }}">
-  {% else %}<div class="noposter" style="--h:{{ (p.id * 47) % 360 }}"><span>{{ p.title }}</span><small>{{ p.release_year }}</small></div>{% endif %}
+  <div class="poster">
+    {% if p.poster_url %}<img src="{{ p.poster_url | poster }}" alt="{{ p.title }}" loading="lazy">
+    {% else %}<div class="noposter" style="--h:{{ (p.id * 47) % 360 }}"><span>{{ p.title }}</span><small>{{ p.release_year }}</small></div>{% endif %}
+    <span class="rating">★ {{ p.rating }}</span>
+  </div>
   <div class="info">
     <h3>{{ p.title }}</h3>
-    <span class="score">⭐ {{ p.rating }}</span>
-    <small>{{ p.generos }}</small>
-    <p>{{ p.overview[:110] }}…</p>
+    <div class="meta"><span>{{ p.release_year }}</span>{% for g in (p.generos or '').split(', ')[:2] if g %}<span class="pill">{{ g }}</span>{% endfor %}</div>
+    <p>{{ p.overview[:100] }}…</p>
   </div>
 </a>

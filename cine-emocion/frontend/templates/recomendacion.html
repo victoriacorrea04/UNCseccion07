@@ -1,14 +1,29 @@
 {% extends "base.html" %}
 {% block content %}
 {% if emocion %}
-  <h2>Detectamos: {{ emocion.emoji }} {{ emocion.label }}</h2>
-  <p>Estas películas pueden ir bien con tu estado de ánimo:</p>
+  <section class="resultado emo-{{ emocion.name }}">
+    <span class="emoji-grande">{{ emocion.emoji }}</span>
+    <div>
+      <p class="eyebrow">Detectamos que te sientes</p>
+      <h1>{{ emocion.label }}</h1>
+      <p class="sub">Estas películas pueden acompañar tu estado de ánimo.</p>
+      {% if personalizada %}<p class="aviso">✨ Ajustado a tus preferencias: priorizamos tus géneros favoritos y dejamos fuera los que prefieres evitar.</p>{% endif %}
+    </div>
+  </section>
 {% else %}
-  <h2>No pudimos detectar tu emoción 🤔</h2>
-  <p>Prueba con palabras como "feliz", "triste", "enojado"… Mientras tanto, las mejor puntuadas:</p>
+  <section class="resultado">
+    <span class="emoji-grande">🤔</span>
+    <div>
+      <h1>No pudimos detectar tu emoción</h1>
+      <p class="sub">Prueba con palabras como "feliz", "triste" o "enojado". Mientras tanto, las mejor puntuadas:</p>
+    </div>
+  </section>
 {% endif %}
 <div class="grid">
   {% for p in peliculas %}{% include "_card.html" %}{% endfor %}
 </div>
-<p><a href="{{ url_for('index') }}">← Volver</a></p>
+<p class="acciones">
+  {% if request.args.get('u') %}<a class="boton-sec" href="{{ url_for('hoy') }}">Cambiar cómo me siento</a>{% endif %}
+  <a class="boton-sec" href="{{ url_for('index') }}">Ver el catálogo</a>
+</p>
 {% endblock %}

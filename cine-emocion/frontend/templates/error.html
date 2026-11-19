@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>Ups 😕</h2>
-<p>{{ mensaje }}</p>
-<p><a href="{{ url_for('index') }}">← Volver al inicio</a></p>
+<section class="resultado">
+  <span class="emoji-grande">😕</span>
+  <div><h1>Ups…</h1><p class="sub">{{ mensaje }}</p>
+  <p class="acciones"><a class="boton-sec" href="{{ url_for('index') }}">← Volver al inicio</a></p></div>
+</section>
 {% endblock %}

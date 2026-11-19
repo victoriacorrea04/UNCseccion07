@@ -1,38 +1,38 @@
 {% extends "base.html" %}
 {% block content %}
-<section class="box">
-  <h2>¿Cómo te sientes hoy?</h2>
-  <form method="post" action="{{ url_for('recomendar') }}" class="row">
-    <input name="texto" placeholder="Ej: hoy me siento muy triste y cansado…" required>
+<section class="portada">
+  <p class="eyebrow">Películas según tu estado de ánimo</p>
+  <h1>¿Cómo te sientes <em>hoy</em>?</h1>
+  <form method="post" action="{{ url_for('recomendar') }}" class="busqueda">
+    <input name="texto" placeholder="Cuéntalo con tus palabras: hoy me siento muy triste y cansado…" required>
     <button>Recomendar</button>
   </form>
-  <div class="chips">
+  <div class="emociones">
     {% for e in emociones %}
-      <a href="{{ url_for('recomendar', emocion=e.name) }}">{{ e.emoji }} {{ e.label }}</a>
+      <a class="emo emo-{{ e.name }}" href="{{ url_for('recomendar', emocion=e.name) }}"><span>{{ e.emoji }}</span>{{ e.label }}</a>
     {% endfor %}
   </div>
+  {% if request.args.get('u') %}<a class="enlace-flecha" href="{{ url_for('hoy') }}">Responder el cuestionario completo y afinar mis recomendaciones →</a>{% endif %}
 </section>
 
-<h2>Catálogo <small class="total">({{ total }} películas)</small></h2>
-<form method="get" class="row">
-  <select name="genero" onchange="this.form.submit()">
-    <option value="">Todos los géneros</option>
-    {% for g in generos %}
-      <option value="{{ g.id }}" {{ 'selected' if g.id == genero_id }}>{{ g.name }}</option>
-    {% endfor %}
-  </select>
-</form>
+<div class="titulo-seccion">
+  <h2>Catálogo</h2><span class="contador">{{ total }} películas</span>
+</div>
+<div class="filtros">
+  <a class="pill-filtro {{ 'on' if not genero_id }}" href="{{ url_for('index') }}">Todas</a>
+  {% for g in generos %}
+    <a class="pill-filtro {{ 'on' if g.id == genero_id }}" href="{{ url_for('index', genero=g.id) }}">{{ g.name }}</a>
+  {% endfor %}
+</div>
 <div class="grid">
   {% for p in peliculas %}{% include "_card.html" %}{% endfor %}
 </div>
 
 <nav class="paginado">
-  {% if pagina > 1 %}
-    <a href="{{ url_for('index', pagina=pagina - 1, genero=genero_id) }}">← Anterior</a>
+  {% if pagina > 1 %}<a href="{{ url_for('index', pagina=pagina - 1, genero=genero_id) }}">← Anterior</a>
   {% else %}<span class="off">← Anterior</span>{% endif %}
   <span>Página {{ pagina }} de {{ paginas }}</span>
-  {% if pagina < paginas %}
-    <a href="{{ url_for('index', pagina=pagina + 1, genero=genero_id) }}">Siguiente →</a>
+  {% if pagina < paginas %}<a href="{{ url_for('index', pagina=pagina + 1, genero=genero_id) }}">Siguiente →</a>
   {% else %}<span class="off">Siguiente →</span>{% endif %}
 </nav>
 {% endblock %}

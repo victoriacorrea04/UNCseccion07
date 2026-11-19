@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block body %}
+<div class="split">
+  <aside class="hero">
+    <div class="mosaico">
+      {% for url in posters %}<img src="{{ url | poster }}" alt="">{% endfor %}
+    </div>
+    <div class="hero-texto">
+      <span class="logo hero-logo"><span class="logo-mark"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6.5v11l9-5.5z" fill="currentColor"/></svg></span>CineEmoción</span>
+      <h1>Películas para <em>cómo te sientes</em></h1>
+      <p>Cuéntanos tu emoción del día y te recomendamos qué ver.</p>
+    </div>
+  </aside>
+  <section class="panel">
+    <div class="panel-form">
+      <p class="eyebrow">{% block eyebrow %}{% endblock %}</p>
+      <h2>{% block titulo %}{% endblock %}</h2>
+      {% if error %}<p class="error caja-error">{{ error }}</p>{% endif %}
+      <form method="post" class="auth">
+        <label>Usuario<input name="usuario" placeholder="tu usuario" required minlength="3" maxlength="50" autofocus></label>
+        <label>Contraseña<input name="password" type="password" placeholder="••••" required minlength="4"></label>
+        <button class="boton">{% block boton %}{% endblock %}</button>
+      </form>
+      <p class="alterno">{% block alterno %}{% endblock %}</p>
+    </div>
+  </section>
+</div>
+{% endblock %}
